@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clatract - AI Contract Generator</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #0070f3;
+    }
+    .card {
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      background: #f9f9f9;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    button {
+      background: #0070f3;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0051a0;
+    }
+    #api-response {
+      white-space: pre-wrap;
+      background: #f1f1f1;
+      padding: 1rem;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>Clatract - AI Contract Generator</h1>
+  <p>Welcome to Clatract, your AI-powered contract and offer clarity generator.</p>
+  
+  <div class="card">
+    <h2>Test API Connection</h2>
+    <p>Click the button below to test connection to the API:</p>
+    <button id="test-api">Test API</button>
+    <div id="api-response"></div>
+  </div>
+
+  <script>
+    document.getElementById('test-api').addEventListener('click', async () => {
+      const responseEl = document.getElementById('api-response');
+      responseEl.textContent = 'Loading...';
+      
+      try {
+        const response = await fetch('/api/hello');
+        const data = await response.json();
+        responseEl.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        responseEl.textContent = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html> 

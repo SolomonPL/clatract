@@ -2,6 +2,7 @@
   "name": "clatract",
   "version": "1.0.0",
   "description": "AI-powered offer clarity and contract generator SaaS",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "client": "cd client && npm run dev",
@@ -31,6 +32,6 @@
     "concurrently": "^8.2.0"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=16"
   }
 } 
