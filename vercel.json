@@ -2,22 +2,44 @@
   "version": 2,
   "builds": [
     {
-      "src": "server/dist/index.js",
-      "use": "@vercel/node"
+      "src": "vercel-api.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["server/src/**"],
+        "maxDuration": 60
+      }
     },
     {
-      "src": "client/dist/**",
-      "use": "@vercel/static"
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist",
+        "buildCommand": "npm run build"
+      }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server/dist/index.js"
+      "dest": "vercel-api.ts",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept, Authorization"
+      }
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
       "dest": "client/dist/$1"
     }
-  ]
+  ],
+  "functions": {
+    "vercel-api.ts": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  }
 } 

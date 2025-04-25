@@ -170,17 +170,28 @@ export const exportContract = async (req: Request, res: Response) => {
     `;
     
     // PDF options
-    const options = { format: 'Letter' };
+    const options = { 
+      format: 'Letter',
+      timeout: 25000 // Increase timeout for serverless environment
+    };
     
-    // Create PDF with proper type declarations
-    pdf.create(html, options).toBuffer((err: Error | null, buffer: Buffer) => {
-      if (err) {
-        console.error('Error creating PDF:', err);
-        return res.status(500).json({
-          success: false,
-          message: 'Error creating PDF'
+    // Create PDF with promise for better serverless handling
+    // Wrap the pdf creation in a promise to handle errors better
+    const generatePdf = () => {
+      return new Promise((resolve, reject) => {
+        const pdf = require('html-pdf');
+        pdf.create(html, options).toBuffer((err: Error | null, buffer: Buffer) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve(buffer);
         });
-      }
+      });
+    };
+
+    try {
+      const buffer = await generatePdf() as Buffer;
       
       // Set response headers
       res.setHeader('Content-Type', 'application/pdf');
@@ -188,7 +199,13 @@ export const exportContract = async (req: Request, res: Response) => {
       
       // Send PDF buffer
       return res.send(buffer);
-    });
+    } catch (pdfError) {
+      console.error('Error creating PDF:', pdfError);
+      return res.status(500).json({
+        success: false,
+        message: 'Error creating PDF'
+      });
+    }
   } catch (error: any) {
     console.error('Error exporting contract:', error);
     return res.status(500).json({

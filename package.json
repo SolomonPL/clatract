@@ -13,6 +13,7 @@
     "build:client": "cd client && npm run build",
     "build:server": "cd server && npm run build",
     "build": "npm run build:server && npm run build:client",
+    "vercel-build": "echo 'Vercel build script - Using individual builds for client and server'",
     "start": "cd server && npm start"
   },
   "keywords": [
@@ -28,5 +29,8 @@
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 } 
